@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use App\Console\ConsoleApplication;
+use Symfony\Component\Dotenv\Dotenv;
+
+// ── Autoloader ──────────────────────────────────────────────────────────────
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../vendor/autoload.php', // when installed as a dependency
+];
+
+$autoloaderFound = false;
+foreach ($autoloadPaths as $autoloadPath) {
+    if (file_exists($autoloadPath)) {
+        require_once $autoloadPath;
+        $autoloaderFound = true;
+        break;
+    }
+}
+
+if (!$autoloaderFound) {
+    fwrite(
+        STDERR,
+        '[ERROR] Composer autoloader not found.' . PHP_EOL .
+        'Run "composer install" inside the project root.' . PHP_EOL
+    );
+    exit(1);
+}
+
+// ── Environment ─────────────────────────────────────────────────────────────
+$envFile = dirname(__DIR__) . '/.env';
+
+if (class_exists(Dotenv::class) && file_exists($envFile)) {
+    (new Dotenv())->usePutenv()->loadEnv($envFile);
+}
+
+$_SERVER['APP_ENV']   ??= $_ENV['APP_ENV']   ?? 'prod';
+$_SERVER['APP_DEBUG'] ??= $_ENV['APP_DEBUG'] ?? '0';
+
+// ── Bootstrap & Run ─────────────────────────────────────────────────────────
+$application = new ConsoleApplication();
+
+exit($application->run());

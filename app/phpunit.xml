@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnEmptyTestSuite="false"
+         beStrictAboutOutputDuringTests="true"
+         cacheDirectory=".phpunit.cache"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Functional">
+            <directory>tests/Functional</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </source>
+
+    <coverage>
+        <report>
+            <html outputDirectory="coverage/html"/>
+            <clover outputFile="coverage/clover.xml"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false"/>
+        </report>
+    </coverage>
+
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="0"/>
+    </php>
+</phpunit>
